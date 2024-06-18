@@ -1,10 +1,15 @@
 import NextAuth from 'next-auth';
 import GitHubProvider from 'next-auth/providers/github';
 import { MongoDBAdapter } from '@next-auth/mongodb-adapter';
-import clientPromise from 'lib/mongodb';
+import client from 'lib/mongodb';
 
 export default NextAuth({
-  adapter: MongoDBAdapter(clientPromise),
+  // TODO: investigate Auth.js required changes to accomodate new `client` method
+  // These docs reference the old `clientPromise` method:
+  // https://authjs.dev/getting-started/adapters/mongodb#configuration
+  // Pulled from:
+  // https://github.com/vercel/next.js/tree/canary/examples/with-mongodb
+  adapter: MongoDBAdapter(client),
   providers: [
     GitHubProvider({
       clientId: process.env.GITHUB_CLIENT_ID,
