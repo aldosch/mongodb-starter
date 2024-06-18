@@ -1,4 +1,4 @@
-import clientPromise from '@/lib/mongodb';
+import client from '@/lib/mongodb';
 import { remark } from 'remark';
 import remarkMdx from 'remark-mdx';
 import { serialize } from 'next-mdx-remote/serialize';
@@ -42,7 +42,6 @@ Tincidunt quam neque in cursus viverra orci, dapibus nec tristique. Nullam ut si
 Et vivamus lorem pulvinar nascetur non. Pulvinar a sed platea rhoncus ac mauris amet. Urna, sem pretium sit pretium urna, senectus vitae. Scelerisque fermentum, cursus felis dui suspendisse velit pharetra. Augue et duis cursus maecenas eget quam lectus. Accumsan vitae nascetur pharetra rhoncus praesent dictum risus suspendisse.`;
 
 export async function getUser(username: string): Promise<UserProps | null> {
-  const client = await clientPromise;
   const collection = client.db('test').collection('users');
   const results = await collection.findOne<UserProps>(
     { username },
@@ -59,7 +58,6 @@ export async function getUser(username: string): Promise<UserProps | null> {
 }
 
 export async function getFirstUser(): Promise<UserProps | null> {
-  const client = await clientPromise;
   const collection = client.db('test').collection('users');
   const results = await collection.findOne<UserProps>(
     {},
@@ -78,7 +76,6 @@ export async function getFirstUser(): Promise<UserProps | null> {
 }
 
 export async function getAllUsers(): Promise<ResultProps[]> {
-  const client = await clientPromise;
   const collection = client.db('test').collection('users');
   return await collection
     .aggregate<ResultProps>([
@@ -120,7 +117,6 @@ export async function getAllUsers(): Promise<ResultProps[]> {
 }
 
 export async function searchUser(query: string): Promise<UserProps[]> {
-  const client = await clientPromise;
   const collection = client.db('test').collection('users');
   return await collection
     .aggregate<UserProps>([
@@ -199,13 +195,11 @@ export async function searchUser(query: string): Promise<UserProps[]> {
 }
 
 export async function getUserCount(): Promise<number> {
-  const client = await clientPromise;
   const collection = client.db('test').collection('users');
   return await collection.countDocuments();
 }
 
 export async function updateUser(username: string, bio: string) {
-  const client = await clientPromise;
   const collection = client.db('test').collection('users');
   return await collection.updateOne({ username }, { $set: { bio } });
 }

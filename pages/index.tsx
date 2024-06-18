@@ -7,7 +7,7 @@ import {
   getFirstUser
 } from '@/lib/api/user';
 import { defaultMetaProps } from '@/components/layout/meta';
-import clientPromise from '@/lib/mongodb';
+import client from '@/lib/mongodb';
 
 export default function Home({ user }: { user: UserProps }) {
   return <Profile user={user} settings={false} />;
@@ -16,7 +16,7 @@ export default function Home({ user }: { user: UserProps }) {
 export const getStaticProps: GetStaticProps = async () => {
   // You should remove this try-catch block once your MongoDB Cluster is fully provisioned
   try {
-    await clientPromise;
+    await client.connect();
   } catch (e: any) {
     if (e.code === 'ENOTFOUND') {
       // cluster is still provisioning

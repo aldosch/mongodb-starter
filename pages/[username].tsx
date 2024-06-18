@@ -3,7 +3,7 @@ import { GetStaticProps } from 'next';
 import { defaultMetaProps } from '@/components/layout/meta';
 import { getUser, getAllUsers, getUserCount } from '@/lib/api/user';
 export { default } from '.';
-import clientPromise from '@/lib/mongodb';
+import client from '@/lib/mongodb';
 
 interface Params extends ParsedUrlQuery {
   username: string;
@@ -12,7 +12,7 @@ interface Params extends ParsedUrlQuery {
 export const getStaticPaths = async () => {
   // You should remove this try-catch block once your MongoDB Cluster is fully provisioned
   try {
-    await clientPromise;
+    await client.connect();
   } catch (e: any) {
     // cluster is still provisioning
     return {
@@ -34,7 +34,7 @@ export const getStaticPaths = async () => {
 export const getStaticProps: GetStaticProps = async (context) => {
   // You should remove this try-catch block once your MongoDB Cluster is fully provisioned
   try {
-    await clientPromise;
+    await client.connect();
   } catch (e: any) {
     if (e.code === 'ENOTFOUND') {
       // cluster is still provisioning
